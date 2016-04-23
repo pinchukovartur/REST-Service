@@ -10,14 +10,21 @@ import static service.DAO.Constants.*;
 
 public class DAO extends Applet {
 
+    private Driver driver;
+    private Connection connection;
+
     public DAO() {
+        try {
+            driver = new com.mysql.jdbc.Driver();
+            DriverManager.registerDriver(driver);
+            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setStudent(Student student) {
         try {
-            Driver driver = new com.mysql.jdbc.Driver();
-            DriverManager.registerDriver(driver);
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             PreparedStatement statement = connection.prepareStatement(Constants.INSERT);
             statement.setString(1, student.getName());
             statement.setString(2, student.getSurname());
@@ -33,9 +40,6 @@ public class DAO extends Applet {
 
     public void deleteStudentById(int idStudent) {
         try {
-            Driver driver = new com.mysql.jdbc.Driver();
-            DriverManager.registerDriver(driver);
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             PreparedStatement statement = connection.prepareStatement(Constants.DELETE);
             statement.setInt(1, idStudent);
             statement.executeUpdate();
@@ -47,11 +51,8 @@ public class DAO extends Applet {
     }
 
     public Student searchStudentById(int idStudent) {
-        Student student = null;
+        Student student = new Student();
         try {
-            Driver driver = new com.mysql.jdbc.Driver();
-            DriverManager.registerDriver(driver);
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             PreparedStatement statement = connection.prepareStatement(Constants.SEARCH);
             statement.setInt(1, idStudent);
             ResultSet resultSet = statement.executeQuery();
@@ -74,9 +75,6 @@ public class DAO extends Applet {
 
     public void updateStudentById(Student student) {
         try {
-            Driver driver = new com.mysql.jdbc.Driver();
-            DriverManager.registerDriver(driver);
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             PreparedStatement statement = connection.prepareStatement(Constants.UPDATE);
             statement.setInt(5, student.getIdStudent());
             statement.setString(1, student.getName());
@@ -95,9 +93,6 @@ public class DAO extends Applet {
     public List<Student> getAllStudent() {
         List<Student> students = new ArrayList<Student>();
         try {
-            Driver driver = new com.mysql.jdbc.Driver();
-            DriverManager.registerDriver(driver);
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             PreparedStatement statement = connection.prepareStatement(Constants.SELECT_ALL);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {

@@ -24,8 +24,7 @@ public class RestService {
     public Student getStudent(@PathParam("id") String id) throws SQLException {
         DAO dao = new DAO();
         Student student = dao.searchStudentById(Integer.parseInt(id));
-        if (student != null) return student;
-        else return null;
+        return student;
     }
 
     @PUT
